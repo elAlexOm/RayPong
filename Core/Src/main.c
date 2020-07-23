@@ -128,9 +128,9 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
-    control_task();
+//    control_task();
     ws2812_task();
-    wifi_task();
+//    wifi_task();
     
     /* USER CODE END WHILE */
 

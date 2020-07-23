@@ -60,7 +60,9 @@
 
 /* External variables --------------------------------------------------------*/
 extern DAC_HandleTypeDef hdac;
+extern DMA_HandleTypeDef hdma_tim16_ch1_up;
 extern TIM_HandleTypeDef htim6;
+extern TIM_HandleTypeDef htim16;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -151,7 +153,7 @@ void DMA1_Ch2_3_DMA2_Ch1_2_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Ch2_3_DMA2_Ch1_2_IRQn 0 */
 
   /* USER CODE END DMA1_Ch2_3_DMA2_Ch1_2_IRQn 0 */
-  
+  HAL_DMA_IRQHandler(&hdma_tim16_ch1_up);
   /* USER CODE BEGIN DMA1_Ch2_3_DMA2_Ch1_2_IRQn 1 */
 
   /* USER CODE END DMA1_Ch2_3_DMA2_Ch1_2_IRQn 1 */
@@ -180,6 +182,7 @@ void TIM16_IRQHandler(void)
   /* USER CODE BEGIN TIM16_IRQn 0 */
   ws_timer_irq();
   /* USER CODE END TIM16_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim16);
   /* USER CODE BEGIN TIM16_IRQn 1 */
 
   /* USER CODE END TIM16_IRQn 1 */

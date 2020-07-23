@@ -14,22 +14,21 @@
 #include "tim.h"
 #include "bsp.h"
 
-#define PWM_BUFFER_SIZE           256
-
-#define WS_LED_COUNT              45
+#define WS_LED_COUNT              80
 #define WS_PWM_SIZE               24
 
-#define LED_TIMER_PERIOD          69
-#define PWM_1                     ( LED_TIMER_PERIOD / 3 )
-#define PWM_0                     ( 2 * LED_TIMER_PERIOD / 3 )
+#define LED_TIMER_PERIOD          59
+#define PWM_0                     ( LED_TIMER_PERIOD / 3 )
+#define PWM_1                     ( 2 * LED_TIMER_PERIOD / 3 )
 
 #define LED_Timer                 TIM16
+#define hLED_Timer                htim16
 
 typedef union {
   struct {
-    uint8_t green;
-    uint8_t red;
     uint8_t blue;
+    uint8_t red;
+    uint8_t green;
   };
   uint32_t  bits;
 } ws_led_s;
@@ -37,10 +36,18 @@ typedef union {
 static uint8_t  led_run = 0;                                        //!< Флаг запуска обновления строки
 
 static ws_led_s ws_string[WS_LED_COUNT];                            //!< Буфер строки в цветах светодиодов
-static uint8_t pwm_buffer[WS_LED_COUNT * WS_PWM_SIZE] = { PWM_1 };      //!< Буфер строки в параметрах таймера
+static uint8_t pwm_buffer[WS_LED_COUNT * WS_PWM_SIZE] = { PWM_1 };  //!< Буфер строки в параметрах таймера
 static uint32_t pwm_index = 0;                                      //!< Индекс записываемого светодиода
 
 static struct pt pt_ws2812;
+
+uint8_t led_pwm0, led_pwm1;
+
+static int32_t led_counter = 0;
+static uint32_t direct = 1;
+static uint32_t led_max = 40;
+
+ws_led_s led_color = { .blue = 100, .red = 200, .green = 50 };
 
 /** Запуск обновления экрана
 */
@@ -56,8 +63,9 @@ void ws_led_2_pwm( ws_led_s led, uint8_t* buffer ) {
   uint32_t pwm = led.bits;
   
   for( uint8_t i = 0; i < 24; i++ ) {
-    buffer[i] = PWM_0;
-    if( pwm & 0x00000001 ) buffer[i] = PWM_1;
+    buffer[i] = led_pwm0;
+    if( pwm & 0x00100000 ) buffer[i] = led_pwm1;
+    pwm <<= 1;
   }
 }
 
@@ -72,32 +80,33 @@ void init_ws2812_task( void ) {
 int ws2812_task( void ) {
   PT_BEGIN( &pt_ws2812 ); 
   
-  MX_TIM16_Init();
-  
+  led_pwm0 = hLED_Timer.Instance->ARR / 3;
+  led_pwm1 = led_pwm0 * 2;
+    
   for( uint8_t i = 0; i < WS_LED_COUNT; i++ ) {
-    ws_string[i].blue   = 255 - 5*i;
-    ws_string[i].green  = 255 - 5*i;
-    ws_string[i].red    = 255 - 5*i;    
+    ws_string[i].bits = 0;   
   }
-  
-  for( uint32_t i = 0; i < sizeof( pwm_buffer ); i++ ) {
-    pwm_buffer[i] = i;
-  }
-  
+ 
   while( 1 ) {
     PT_WAIT_WHILE( &pt_ws2812, led_run == 0 ); 
     led_run = 0;
-//    for( uint8_t i = 0; i < WS_LED_COUNT; i++ ) {
-//      ws_led_2_pwm( ws_string[i], &pwm_buffer[i*3] );
-//      
-//    }
-    pwm_index = 0;
-    LED_Timer->ARR    = LED_TIMER_PERIOD;
-    LED_Timer->BDTR   = TIM_BDTR_MOE;
-    LED_Timer->CCER   = TIM_CCER_CC1E;
-    LED_Timer->SR     = 0;
-    LED_Timer->DIER   = 1;
-    LED_Timer->CR1    = 1;
+    
+    if( direct ) {
+      ws_string[led_counter++].bits = 0;
+      ws_string[led_counter].bits = led_color.bits;
+      if( led_counter >= led_max ) direct = 0;
+    }
+    else {
+      ws_string[led_counter--].bits = 0;
+      ws_string[led_counter].bits = led_color.bits;
+      if( led_counter == 0 ) direct = 1;      
+    }
+    
+    for( uint8_t i = 0; i < WS_LED_COUNT; i++ ) {
+      ws_led_2_pwm( ws_string[i], &pwm_buffer[i*24] );
+      
+    }
+    HAL_TIM_PWM_Start_DMA( &hLED_Timer, TIM_CHANNEL_1, ( uint32_t* )pwm_buffer, sizeof( pwm_buffer ));
   }
   PT_END( &pt_ws2812 );
 }
@@ -107,12 +116,14 @@ int ws2812_task( void ) {
 void ws_timer_irq( void ) {
   LED_Timer->SR = 0;
   
-//  REG_LATCH_TOOGLE();
-  
   if( ++pwm_index >= ( WS_LED_COUNT * WS_PWM_SIZE )) {
     LED_Timer->CR1 = 0;
   }
   else {  
     LED_Timer->CCR1 = pwm_buffer[pwm_index];
   }
+}
+
+void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim) {
+  LED_Timer->CR1 = 0;
 }

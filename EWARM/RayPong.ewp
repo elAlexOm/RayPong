@@ -226,7 +226,6 @@
           <name>CCDefines</name>
           <state>USE_HAL_DRIVER</state>
           <state>STM32F091xC</state>
-          <state>USE_FULL_LL_DRIVER</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -1198,15 +1197,6 @@
         <name>$PROJ_DIR$\..\Drivers\STM32F0xx_HAL_Driver\Src\stm32f0xx_hal_exti.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$/../Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_ll_rcc.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$/../Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_ll_utils.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$/../Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_ll_exti.c</name>
-      </file>
-      <file>
         <name>$PROJ_DIR$\..\Drivers\STM32F0xx_HAL_Driver\Src\stm32f0xx_hal_dac.c</name>
       </file>
       <file>
@@ -1223,15 +1213,6 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\Drivers\STM32F0xx_HAL_Driver\Src\stm32f0xx_hal_tim_ex.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$/../Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_ll_tim.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$/../Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_ll_gpio.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$/../Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_ll_dma.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\Drivers\STM32F0xx_HAL_Driver\Src\stm32f0xx_hal_uart.c</name>

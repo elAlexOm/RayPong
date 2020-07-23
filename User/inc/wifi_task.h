@@ -1,0 +1,17 @@
+
+/** \file   wifi_task.h
+*   \author Alex
+*   \date   22.07.2020
+*
+* Задача обслуживания модуля ESP8266
+*/
+
+#pragma once
+
+/** Инициализация задачи обслуживания модуля ESP8266
+*/
+void init_wifi_task( void );
+
+/** Задача обслуживания модуля ESP8266
+*/
+int wifi_task( void );

@@ -22,6 +22,8 @@
 #include "main.h"
 #include "adc.h"
 #include "dac.h"
+#include "dma.h"
+#include "fatfs.h"
 #include "spi.h"
 #include "tim.h"
 #include "usart.h"
@@ -30,6 +32,12 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "bsp.h"
+    
+#include "control_task.h"
+#include "ws2812_task.h"
+#include "wifi_task.h"
+    
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -91,6 +99,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_TIM3_Init();
   MX_ADC_Init();
   MX_DAC_Init();
@@ -98,14 +107,31 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM16_Init();
   MX_USART6_UART_Init();
+  MX_FATFS_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
 
+  init_control_task();
+  init_ws2812_task();
+  init_wifi_task();
+  
+  DBGMCU->APB1FZ = ( 1 << 4 );
+  DBGMCU->APB2FZ = ( 1 << 17 );
+  
+  HAL_TIM_Base_Start_IT( &Update_Timer );
+  
+  V50_ENABLE();
+  LED_POWER_ON();
+  
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+  while (1) {
+    control_task();
+    ws2812_task();
+    wifi_task();
+    
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -151,7 +177,12 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_TIM_PeriodElapsedCallback( TIM_HandleTypeDef *htim ) {
+  if( htim == &Update_Timer ) {
+    ws_start_update();
+    REG_LATCH_TOOGLE();
+  }
+}
 /* USER CODE END 4 */
 
 /**

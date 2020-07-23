@@ -29,6 +29,17 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx_hal.h"
+#include "stm32f0xx_ll_tim.h"
+#include "stm32f0xx_ll_bus.h"
+#include "stm32f0xx_ll_cortex.h"
+#include "stm32f0xx_ll_rcc.h"
+#include "stm32f0xx_ll_system.h"
+#include "stm32f0xx_ll_utils.h"
+#include "stm32f0xx_ll_pwr.h"
+#include "stm32f0xx_ll_gpio.h"
+#include "stm32f0xx_ll_dma.h"
+
+#include "stm32f0xx_ll_exti.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -58,6 +69,10 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define EN_3V3_Pin GPIO_PIN_13
+#define EN_3V3_GPIO_Port GPIOC
+#define EN_5V0_Pin GPIO_PIN_14
+#define EN_5V0_GPIO_Port GPIOC
 #define ESP_UART6_TX_Pin GPIO_PIN_0
 #define ESP_UART6_TX_GPIO_Port GPIOC
 #define ESP_UART6_RX_Pin GPIO_PIN_1
@@ -72,6 +87,12 @@ void Error_Handler(void);
 #define ESP_RST_GPIO_Port GPIOA
 #define BAT_LVL_Pin GPIO_PIN_2
 #define BAT_LVL_GPIO_Port GPIOA
+#define LED_PWR_Pin GPIO_PIN_3
+#define LED_PWR_GPIO_Port GPIOA
+#define LED_PWM_TIMER_Pin GPIO_PIN_6
+#define LED_PWM_TIMER_GPIO_Port GPIOA
+#define LED_PWM_SPI_Pin GPIO_PIN_7
+#define LED_PWM_SPI_GPIO_Port GPIOA
 #define ADC_IN_Pin GPIO_PIN_4
 #define ADC_IN_GPIO_Port GPIOC
 #define PWR_ON_Pin GPIO_PIN_5

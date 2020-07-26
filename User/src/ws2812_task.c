@@ -13,8 +13,9 @@
 #include "main.h"
 #include "tim.h"
 #include "bsp.h"
+#include "draw.h"
 
-#define WS_LED_COUNT              80
+
 #define WS_PWM_SIZE               24
 
 #define LED_TIMER_PERIOD          59
@@ -24,28 +25,20 @@
 #define LED_Timer                 TIM16
 #define hLED_Timer                htim16
 
-typedef union {
-  struct {
-    uint8_t blue;
-    uint8_t red;
-    uint8_t green;
-  };
-  uint32_t  bits;
-} ws_led_s;
-
 static uint8_t  led_run = 0;                                        //!< Флаг запуска обновления строки
 
-static ws_led_s ws_string[WS_LED_COUNT];                            //!< Буфер строки в цветах светодиодов
+ws_led_s ws_string[WS_LED_COUNT];                                   //!< Буфер строки в цветах светодиодов
 static uint8_t pwm_buffer[WS_LED_COUNT * WS_PWM_SIZE] = { PWM_1 };  //!< Буфер строки в параметрах таймера
 static uint32_t pwm_index = 0;                                      //!< Индекс записываемого светодиода
 
 static struct pt pt_ws2812;
 
-uint8_t led_pwm0, led_pwm1;
+static uint8_t led_pwm0;
+static uint8_t led_pwm1;
 
 static int32_t led_counter = 0;
 static uint32_t direct = 1;
-static uint32_t led_max = 40;
+static uint32_t led_max = 80;
 
 ws_led_s led_color = { .blue = 100, .red = 200, .green = 50 };
 
@@ -93,11 +86,13 @@ int ws2812_task( void ) {
     
     if( direct ) {
       ws_string[led_counter++].bits = 0;
+      led_color.bits += 10;
       ws_string[led_counter].bits = led_color.bits;
       if( led_counter >= led_max ) direct = 0;
     }
     else {
       ws_string[led_counter--].bits = 0;
+      led_color.bits += 10;
       ws_string[led_counter].bits = led_color.bits;
       if( led_counter == 0 ) direct = 1;      
     }
@@ -124,6 +119,8 @@ void ws_timer_irq( void ) {
   }
 }
 
+/** Прерывание DMA по кончанию буфера
+*/
 void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim) {
   LED_Timer->CR1 = 0;
 }

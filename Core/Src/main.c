@@ -130,7 +130,7 @@ int main(void)
   while (1) {
 //    control_task();
     ws2812_task();
-//    wifi_task();
+    wifi_task();
     
     /* USER CODE END WHILE */
 

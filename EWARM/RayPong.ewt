@@ -1406,6 +1406,9 @@
                     <name>$PROJ_DIR$\..\Core\Src\dac.c</name>
                 </file>
                 <file>
+                    <name>$PROJ_DIR$\..\Core\Src\dma.c</name>
+                </file>
+                <file>
                     <name>$PROJ_DIR$\..\Core\Src\gpio.c</name>
                 </file>
                 <file>
@@ -1443,7 +1446,19 @@
                 </group>
             </group>
             <group>
+                <name>slre</name>
+                <file>
+                    <name>$PROJ_DIR$\..\slre\slre.c</name>
+                </file>
+            </group>
+            <group>
                 <name>task</name>
+                <group>
+                    <name>draw</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\User\src\draw.c</name>
+                    </file>
+                </group>
                 <file>
                     <name>$PROJ_DIR$\..\User\src\bsp.c</name>
                 </file>

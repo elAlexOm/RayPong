@@ -32,4 +32,10 @@
 #define SET_SDATA2( X )                   { if( X ) S_DATA2_GPIO_Port->BSRR = S_DATA2_Pin; else S_DATA2_GPIO_Port->BRR = S_DATA2_Pin; }
 #define GET_SDATA3()                      (( S_DATA3_GPIO_Port->IDR & S_DATA3_Pin ) ? 1 : 0 )
 
+#define ESP_RESET_LOW()                   { ESP_RST_GPIO_Port->BRR  = ESP_RST_Pin; }
+#define ESP_RESET_HI()                    { ESP_RST_GPIO_Port->BSRR = ESP_RST_Pin; }
+
+#define ESP_PD_LOW()                      { ESP_PD_GPIO_Port->BRR   = ESP_PD_Pin; }
+#define ESP_PD_HI()                       { ESP_PD_GPIO_Port->BSRR  = ESP_PD_Pin; }
+
 void bsp_power_lock( void );

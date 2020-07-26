@@ -24,8 +24,11 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "main.h"
+
 #include "ws2812_task.h"    
-    
+#include "wifi_task.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -186,6 +189,22 @@ void TIM16_IRQHandler(void)
   /* USER CODE BEGIN TIM16_IRQn 1 */
 
   /* USER CODE END TIM16_IRQn 1 */
+}
+
+/**
+  * @brief This function handles USART3 to USART8 global interrupts / USART3 wake-up interrupt through EXTI line 28.
+  */
+void USART3_8_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART3_8_IRQn 0 */
+  if( WIFI_UART->ISR ) {
+    wifi_uart_irq();
+  }
+  /* USER CODE END USART3_8_IRQn 0 */
+  
+  /* USER CODE BEGIN USART3_8_IRQn 1 */
+
+  /* USER CODE END USART3_8_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

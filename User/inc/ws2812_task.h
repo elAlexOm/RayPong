@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "draw.h"
+
 /** Инициализация задачи обслуживания ленты
 */
 void init_ws2812_task( void );
@@ -23,3 +25,5 @@ void ws_start_update( void );
 /** Прерывание таймера светодиодов
 */
 void ws_timer_irq( void );
+
+extern ws_led_s ws_string[];

@@ -12,10 +12,11 @@
 
 typedef struct {
   uint8_t   length;
-  ws_led_s* buffer;
+  pixel_t* buffer;
+  
 } screen_t;
 
 screen_t screen = {
   .length = 85,
-  .buffer = ws_string
+  .buffer = ws_string,  
 };

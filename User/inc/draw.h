@@ -19,4 +19,4 @@ typedef union {
     uint8_t green;
   };
   uint32_t  bits;
-} ws_led_s;
+} pixel_t;

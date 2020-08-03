@@ -104,7 +104,6 @@ int main(void)
   MX_ADC_Init();
   MX_DAC_Init();
   MX_SPI2_Init();
-  MX_TIM1_Init();
   MX_TIM16_Init();
   MX_USART6_UART_Init();
   MX_FATFS_Init();
@@ -114,11 +113,11 @@ int main(void)
   init_control_task();
   init_ws2812_task();
   init_wifi_task();
-  
-  DBGMCU->APB1FZ = ( 1 << 4 );
-  DBGMCU->APB2FZ = ( 1 << 17 );
-  
-  HAL_TIM_Base_Start_IT( &Update_Timer );
+
+//  __DBGMCU_CLK_ENABLE();
+  RCC->APB2ENR |= RCC_APB2ENR_DBGMCUEN;
+  DBGMCU->APB2FZ |= DBGMCU_APB2_FZ_DBG_TIM1_STOP | DBGMCU_APB2_FZ_DBG_TIM16_STOP;  
+  DBGMCU->APB1FZ |= DBGMCU_APB1_FZ_DBG_TIM6_STOP;
   
   V50_ENABLE();
   LED_POWER_ON();
@@ -128,9 +127,9 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
-//    control_task();
+    control_task();
     ws2812_task();
-    wifi_task();
+//    wifi_task();
     
     /* USER CODE END WHILE */
 
@@ -148,7 +147,7 @@ void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-  /** Initializes the CPU, AHB and APB busses clocks 
+  /** Initializes the CPU, AHB and APB busses clocks
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI14|RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
@@ -162,7 +161,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  /** Initializes the CPU, AHB and APB busses clocks 
+  /** Initializes the CPU, AHB and APB busses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1;
@@ -178,11 +177,17 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback( TIM_HandleTypeDef *htim ) {
-  if( htim == &Update_Timer ) {
+  if( htim == &timUpdate ) {
     ws_start_update();
-    REG_LATCH_TOOGLE();
   }
 }
+
+void HAL_TIM_PWM_PulseFinishedCallback( TIM_HandleTypeDef *htim ) {
+  if( htim == &timWsPwm ) {
+    ws_stop_update();
+  }  
+}
+
 /* USER CODE END 4 */
 
 /**
@@ -206,7 +211,7 @@ void Error_Handler(void)
   * @retval None
   */
 void assert_failed(uint8_t *file, uint32_t line)
-{ 
+{
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
      tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */

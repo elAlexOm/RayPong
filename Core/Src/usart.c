@@ -34,11 +34,11 @@ void MX_USART6_UART_Init(void)
 
   /* Peripheral clock enable */
   LL_APB1_GRP2_EnableClock(LL_APB1_GRP2_PERIPH_USART6);
-  
+
   LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOC);
-  /**USART6 GPIO Configuration  
+  /**USART6 GPIO Configuration
   PC0   ------> USART6_TX
-  PC1   ------> USART6_RX 
+  PC1   ------> USART6_RX
   */
   GPIO_InitStruct.Pin = LL_GPIO_PIN_0;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
@@ -60,7 +60,7 @@ void MX_USART6_UART_Init(void)
   NVIC_SetPriority(USART3_8_IRQn, 0);
   NVIC_EnableIRQ(USART3_8_IRQn);
 
-  USART_InitStruct.BaudRate = 76800;
+  USART_InitStruct.BaudRate = 9600;
   USART_InitStruct.DataWidth = LL_USART_DATAWIDTH_8B;
   USART_InitStruct.StopBits = LL_USART_STOPBITS_1;
   USART_InitStruct.Parity = LL_USART_PARITY_NONE;
@@ -69,6 +69,8 @@ void MX_USART6_UART_Init(void)
   USART_InitStruct.OverSampling = LL_USART_OVERSAMPLING_16;
   LL_USART_Init(USART6, &USART_InitStruct);
   LL_USART_DisableIT_CTS(USART6);
+  LL_USART_DisableOverrunDetect(USART6);
+  LL_USART_DisableDMADeactOnRxErr(USART6);
   LL_USART_ConfigAsyncMode(USART6);
   LL_USART_Enable(USART6);
 

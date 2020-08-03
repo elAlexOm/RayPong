@@ -71,7 +71,7 @@ extern TIM_HandleTypeDef htim16;
 /* USER CODE END EV */
 
 /******************************************************************************/
-/*           Cortex-M0 Processor Interruption and Exception Handlers          */ 
+/*           Cortex-M0 Processor Interruption and Exception Handlers          */
 /******************************************************************************/
 /**
   * @brief This function handles Non maskable interrupt.
@@ -183,7 +183,7 @@ void TIM6_DAC_IRQHandler(void)
 void TIM16_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM16_IRQn 0 */
-  ws_timer_irq();
+//  ws_timer_irq();
   /* USER CODE END TIM16_IRQn 0 */
   HAL_TIM_IRQHandler(&htim16);
   /* USER CODE BEGIN TIM16_IRQn 1 */
@@ -201,7 +201,7 @@ void USART3_8_IRQHandler(void)
     wifi_uart_irq();
   }
   /* USER CODE END USART3_8_IRQn 0 */
-  
+
   /* USER CODE BEGIN USART3_8_IRQn 1 */
 
   /* USER CODE END USART3_8_IRQn 1 */

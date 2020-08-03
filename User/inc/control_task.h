@@ -15,3 +15,7 @@ void init_control_task( void );
 /** Задача чтения/записи кнопок/светодиодов
 */
 int control_task( void );
+
+void timControlCompareIrq( void );
+
+void timControlCompleteIrq( void );

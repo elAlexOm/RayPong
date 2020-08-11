@@ -12,6 +12,10 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <StLinkDriver>
+        <stlinkserialNo>52FF74064980515733470487</stlinkserialNo>
+        <stlinkfoundProbes />
+        <stlinkResetStyle>4</stlinkResetStyle>
+        <stlinkResetStrategy>2</stlinkResetStrategy>
         <CStepIntDis>_ 0</CStepIntDis>
         <LeaveTargetRunning>_ 0</LeaveTargetRunning>
     </StLinkDriver>
@@ -20,7 +24,7 @@
         <LeaveTargetRunning>_ 0</LeaveTargetRunning>
     </JLinkDriver>
     <DebugChecksum>
-        <Checksum>686448869</Checksum>
+        <Checksum>53744243</Checksum>
     </DebugChecksum>
     <Exceptions>
         <StopOnUncaught>_ 0</StopOnUncaught>
@@ -32,9 +36,6 @@
     <Disassembly>
         <MixedMode>1</MixedMode>
     </Disassembly>
-    <struct_types>
-        <Fmt0>ws_led_s-bits	1	0</Fmt0>
-    </struct_types>
     <watch_formats>
         <Fmt0>{W}1:keys	1	0</Fmt0>
         <Fmt1>{W}1:led_pwm0	3	0</Fmt1>
@@ -45,7 +46,8 @@
         <mode>0</mode>
     </DisassembleMode>
     <Breakpoints2>
-        <Count>0</Count>
+        <Bp0>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\User\src\wifi_task.c}.82.3" 0 0 1 "" 0 "" 0</Bp0>
+        <Count>1</Count>
     </Breakpoints2>
     <TermIOLog>
         <LoggingEnabled>_ 0</LoggingEnabled>

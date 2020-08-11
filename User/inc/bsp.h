@@ -41,5 +41,3 @@
 
 #define ESP_PD_LOW()                      { ESP_PD_GPIO_Port->BRR   = ESP_PD_Pin; }
 #define ESP_PD_HI()                       { ESP_PD_GPIO_Port->BSRR  = ESP_PD_Pin; }
-
-void bsp_power_lock( void );

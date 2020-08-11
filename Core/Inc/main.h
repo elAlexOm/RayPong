@@ -29,17 +29,6 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx_hal.h"
-#include "stm32f0xx_ll_usart.h"
-#include "stm32f0xx_ll_rcc.h"
-#include "stm32f0xx_ll_bus.h"
-#include "stm32f0xx_ll_cortex.h"
-#include "stm32f0xx_ll_system.h"
-#include "stm32f0xx_ll_utils.h"
-#include "stm32f0xx_ll_pwr.h"
-#include "stm32f0xx_ll_gpio.h"
-#include "stm32f0xx_ll_dma.h"
-
-#include "stm32f0xx_ll_exti.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -97,10 +86,13 @@ void Error_Handler(void);
 #define ADC_IN_GPIO_Port GPIOC
 #define PWR_ON_Pin GPIO_PIN_5
 #define PWR_ON_GPIO_Port GPIOC
+#define PWR_ON_EXTI_IRQn EXTI4_15_IRQn
 #define PLEER_1_Pin GPIO_PIN_0
 #define PLEER_1_GPIO_Port GPIOB
+#define PLEER_1_EXTI_IRQn EXTI0_1_IRQn
 #define PLEER_2_Pin GPIO_PIN_1
 #define PLEER_2_GPIO_Port GPIOB
+#define PLEER_2_EXTI_IRQn EXTI0_1_IRQn
 #define W25_WP_Pin GPIO_PIN_6
 #define W25_WP_GPIO_Port GPIOC
 #define W25_HOLD_Pin GPIO_PIN_7
@@ -126,6 +118,11 @@ void Error_Handler(void);
 #define LED_G_Pin GPIO_PIN_7
 #define LED_G_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
+
+#define USARTx                            USART6
+
+#define WIFI_SSID                         "elAlex"
+#define WIFI_PASSWORD                     "K8ei5a5ejh"
 
 /* USER CODE END Private defines */
 

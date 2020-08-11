@@ -31,12 +31,6 @@ static struct pt pt_ws2812;
 static uint8_t led_pwm0;
 static uint8_t led_pwm1;
 
-static int32_t led_counter = 0;
-static uint32_t direct = 1;
-static uint32_t led_max = 80;
-
-pixel_t led_color = { .blue = 100, .red = 200, .green = 50 };
-
 /** Запуск обновления экрана
 */
 void ws_start_update( void ) {
@@ -78,27 +72,12 @@ int ws2812_task( void ) {
   
   led_pwm0 = timWsPwm.Instance->ARR / 3;
   led_pwm1 = led_pwm0 * 2;
-    
-  for( uint8_t i = 0; i < WS_LED_COUNT; i++ ) {
-    ws_string[i].bits = 0;   
-  }
  
   while( 1 ) {
     PT_WAIT_WHILE( &pt_ws2812, led_run == 0 ); 
     led_run = 0;
     
-    if( direct ) {
-      ws_string[led_counter++].bits = 0;
-      led_color.bits += 10;
-      ws_string[led_counter].bits = led_color.bits;
-      if( led_counter >= led_max ) direct = 0;
-    }
-    else {
-      ws_string[led_counter--].bits = 0;
-      led_color.bits += 10;
-      ws_string[led_counter].bits = led_color.bits;
-      if( led_counter == 0 ) direct = 1;      
-    }
+    update_screen();
     
     for( uint8_t i = 0; i < WS_LED_COUNT; i++ ) {
       ws_led_2_pwm( ws_string[i], &pwm_buffer[i*24] );      

@@ -17,7 +17,6 @@
   ******************************************************************************
   */
 /* USER CODE END Header */
-
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
@@ -37,6 +36,7 @@
 #include "control_task.h"
 #include "ws2812_task.h"
 #include "wifi_task.h"
+#include "draw.h"
     
 /* USER CODE END Includes */
 
@@ -113,14 +113,19 @@ int main(void)
   init_control_task();
   init_ws2812_task();
   init_wifi_task();
-
+  init_draw_task();
+  
 //  __DBGMCU_CLK_ENABLE();
   RCC->APB2ENR |= RCC_APB2ENR_DBGMCUEN;
   DBGMCU->APB2FZ |= DBGMCU_APB2_FZ_DBG_TIM1_STOP | DBGMCU_APB2_FZ_DBG_TIM16_STOP;  
   DBGMCU->APB1FZ |= DBGMCU_APB1_FZ_DBG_TIM6_STOP;
   
-  V50_ENABLE();
-  LED_POWER_ON();
+  V33_ENABLE();
+  HAL_Delay( 100 );
+//  V50_ENABLE();
+//  HAL_Delay( 100 );  
+//  LED_POWER_ON();
+//  HAL_Delay( 100 );  
   
   /* USER CODE END 2 */
 
@@ -129,7 +134,8 @@ int main(void)
   while (1) {
     control_task();
     ws2812_task();
-//    wifi_task();
+    wifi_task();
+    draw_task();
     
     /* USER CODE END WHILE */
 
@@ -147,7 +153,8 @@ void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-  /** Initializes the CPU, AHB and APB busses clocks
+  /** Initializes the RCC Oscillators according to the specified parameters
+  * in the RCC_OscInitTypeDef structure.
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI14|RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
@@ -161,7 +168,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  /** Initializes the CPU, AHB and APB busses clocks
+  /** Initializes the CPU, AHB and APB buses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1;

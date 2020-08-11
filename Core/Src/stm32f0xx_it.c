@@ -28,6 +28,8 @@
 
 #include "ws2812_task.h"    
 #include "wifi_task.h"
+#include "control_task.h"
+#include "esp8266_io.h"
 
 /* USER CODE END Includes */
 
@@ -66,6 +68,7 @@ extern DAC_HandleTypeDef hdac;
 extern DMA_HandleTypeDef hdma_tim16_ch1_up;
 extern TIM_HandleTypeDef htim6;
 extern TIM_HandleTypeDef htim16;
+extern UART_HandleTypeDef huart6;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -137,7 +140,7 @@ void SysTick_Handler(void)
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
-
+  debonce_timer();
   /* USER CODE END SysTick_IRQn 1 */
 }
 
@@ -147,6 +150,35 @@ void SysTick_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32f0xx.s).                    */
 /******************************************************************************/
+
+/**
+  * @brief This function handles EXTI line 0 and 1 interrupts.
+  */
+void EXTI0_1_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI0_1_IRQn 0 */
+
+  /* USER CODE END EXTI0_1_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1);
+  /* USER CODE BEGIN EXTI0_1_IRQn 1 */
+
+  /* USER CODE END EXTI0_1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles EXTI line 4 to 15 interrupts.
+  */
+void EXTI4_15_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI4_15_IRQn 0 */
+
+  /* USER CODE END EXTI4_15_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_5);
+  /* USER CODE BEGIN EXTI4_15_IRQn 1 */
+
+  /* USER CODE END EXTI4_15_IRQn 1 */
+}
 
 /**
   * @brief This function handles DMA1 channel 2 to 3 and DMA2 channel 1 to 2 interrupts.
@@ -197,11 +229,12 @@ void TIM16_IRQHandler(void)
 void USART3_8_IRQHandler(void)
 {
   /* USER CODE BEGIN USART3_8_IRQn 0 */
-  if( WIFI_UART->ISR ) {
-    wifi_uart_irq();
+  if( USART6->ISR != 0 ) {
+    USART6_IRQ_Handler();
+    return;
   }
   /* USER CODE END USART3_8_IRQn 0 */
-
+  //HAL_UART_IRQHandler(&huart6);
   /* USER CODE BEGIN USART3_8_IRQn 1 */
 
   /* USER CODE END USART3_8_IRQn 1 */

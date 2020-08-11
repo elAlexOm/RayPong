@@ -1459,6 +1459,15 @@
                         <name>$PROJ_DIR$\..\User\src\draw.c</name>
                     </file>
                 </group>
+                <group>
+                    <name>ESP8266</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\User\src\esp8266.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\User\src\esp8266_io.c</name>
+                    </file>
+                </group>
                 <file>
                     <name>$PROJ_DIR$\..\User\src\bsp.c</name>
                 </file>
@@ -1473,6 +1482,12 @@
                 </file>
             </group>
         </group>
+    </group>
+    <group>
+        <name>Docs</name>
+        <file>
+            <name>$PROJ_DIR$\..\..\RayPong - ?? ?? ???????????????? LED ????? NEON.docx</name>
+        </file>
     </group>
     <group>
         <name>Drivers</name>

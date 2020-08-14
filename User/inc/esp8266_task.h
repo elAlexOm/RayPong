@@ -17,9 +17,9 @@ void init_esp_task( void );
 */
 int esp_task( void );
 
-void esp_half_rx_buffer_full_event( void );
+void esp_half_rx_buffer_full_event( void* data, uint32_t len );
 
-void esp_full_rx_buffer_full_event( void );
+void esp_full_rx_buffer_full_event( void* data, uint32_t len );
 
 void esp_ev_input_data( char* data );
 

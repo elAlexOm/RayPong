@@ -108,10 +108,10 @@ void ESP_UART_irq( void ) {
       }
       uart_rx_buffer.count++;
       if( uart_rx_buffer.count == ( uart_rx_buffer.size / 2 )) {
-        esp_half_rx_buffer_full_event();
+        esp_half_rx_buffer_full_event( uart_rx_buffer.data, uart_rx_buffer.size / 2 );
       }
       if( uart_rx_buffer.count == uart_rx_buffer.size ) {
-        esp_full_rx_buffer_full_event();
+        esp_full_rx_buffer_full_event( uart_rx_buffer.data, uart_rx_buffer.size );
       }      
     }
   }
@@ -156,11 +156,11 @@ char get_next_char( void ) {
   return result;
 }
 
-__weak void esp_half_rx_buffer_full_event( void ) {
+__weak void esp_half_rx_buffer_full_event( void* data, uint32_t len ) {
   cli_start( uart_rx_buffer.count );
 }
 
-__weak void esp_full_rx_buffer_full_event( void ) {
+__weak void esp_full_rx_buffer_full_event( void* data, uint32_t len ) {
   flush_rx_buffer();
 }
 

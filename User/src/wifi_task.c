@@ -88,134 +88,47 @@ int wifi_task( void ) {
  
   repeat_counter = 3;
   while( repeat_counter-- ) {
-    PT_WAIT_THREAD( &pt_wifi, at_send_command( &pt_at, "AT+CWMODE=1\r\n", "OK", 1000, &at_status ));
-    if( at_status == AT_OK ) break;
-    PT_WAIT_THREAD( &pt_wifi, at_send_command( &pt_at, "AT+CWMODE=1\r\n", "no change", 1000, &at_status )); 
-    if( at_status == AT_OK ) break;    
-    if( repeat_counter == 0 ) PT_RESTART( &pt_wifi );
-  }  
- 
-  repeat_counter = 3;
-  while( repeat_counter-- ) {
-    PT_WAIT_THREAD( &pt_wifi, at_send_command( &pt_at, "AT+CIPMUX=0\r\n", "OK", 1000, &at_status ));
+    PT_WAIT_THREAD( &pt_wifi, at_send_command( &pt_at, "AT+CWSAP=\"RayPongWiFi\",\"45931111\",2,2\r\n", "OK", 10000, &at_status ));
     if( at_status == AT_OK ) break;
     if( repeat_counter == 0 ) PT_RESTART( &pt_wifi );
   }  
-
-  repeat_counter = 3;
-  while( repeat_counter-- ) {
-    char at_cmd[64];
-    sprintf( at_cmd, "AT+CWJAP=\"%s\",\"%s\"%c%c", SSID, PASSWORD, '\r', '\n' );
-    PT_WAIT_THREAD( &pt_wifi, at_send_command( &pt_at, at_cmd, "OK", 10000, &at_status ));
-    if( at_status == AT_OK ) break;
-    if( repeat_counter == 0 ) PT_RESTART( &pt_wifi );
-  }   
-  
-//  /* Reset the IP address field to 0 */
-//  memset( IpAddress, '\0', 15 );
-//  /* Access point joined: start getting IP address */
-//  ESP8266_GetIPAddress( ESP8266_STATION_MODE, IpAddress );
-//  HAL_Delay( 1000 );
-
-  repeat_counter = 3;
-  while( repeat_counter-- ) {
-    char at_cmd[64];
-    
-    if( repeat_counter == 0 ) PT_RESTART( &pt_wifi );
-    sprintf( at_cmd, "AT+CIPSTART=\"TCP\",\"%s\",%lu\r\n", HOST_ADDRESS, HOST_PORT );
-    PT_WAIT_THREAD( &pt_wifi, at_send_command( &pt_at, at_cmd, "Linked", 10000, &at_status ));
-    if( at_status == AT_OK ) break;    
-  }
   
 //  repeat_counter = 3;
 //  while( repeat_counter-- ) {
-//    char* mess = "Hello friend\r\n";
-//    PT_WAIT_THREAD( &pt_wifi, at_send_data( &pt_at, ( uint8_t* )mess, strlen( mess ), 10000, &at_status ));
+//    PT_WAIT_THREAD( &pt_wifi, at_send_command( &pt_at, "AT+CIPAP_DEF=\"192.168.4.1\",\"192.168.4.1\",\"255.255.255.0\"\r\n", "OK", 10000, &at_status ));
 //    if( at_status == AT_OK ) break;
 //    if( repeat_counter == 0 ) PT_RESTART( &pt_wifi );
 //  }
+//  
+  repeat_counter = 3;
+  while( repeat_counter-- ) {
+//    PT_WAIT_THREAD( &pt_wifi, at_send_command( &pt_at, "AT+CWMODE=2\r\n", "OK", 1000, &at_status ));
+//    if( at_status == AT_OK ) break;
+    PT_WAIT_THREAD( &pt_wifi, at_send_command( &pt_at, "AT+CWMODE=2\r\n", "no change", 1000, &at_status )); 
+    if( at_status == AT_OK ) break;    
+    if( repeat_counter == 0 ) PT_RESTART( &pt_wifi );
+  }  
  
   repeat_counter = 3;
   while( repeat_counter-- ) {
-    char at_cmd[64];
-    
-    if( repeat_counter == 0 ) {
-      PT_RESTART( &pt_wifi );
-    }
-    
-    sprintf( at_cmd, "AT+CIPSEND=%lu\r\n", strlen( mess ) );
-    PT_WAIT_THREAD( &pt_wifi, at_send_command( &pt_at, at_cmd, AT_SEND_PROMPT_STRING, 1000, &at_status ));
-    if( at_status != AT_OK ) continue;
-    PT_WAIT_THREAD( &pt_wifi, at_send_command( &pt_at, "Hello friend\r\n", "SEND OK", 1000, &at_status ));
+    PT_WAIT_THREAD( &pt_wifi, at_send_command( &pt_at, "AT+CIPMUX=1\r\n", "OK", 1000, &at_status ));
     if( at_status == AT_OK ) break;
+    if( repeat_counter == 0 ) PT_RESTART( &pt_wifi );
   }  
-  
-//    memset( AtCmd, '\0', MAX_AT_CMD_SIZE );
-//    sprintf( ( char * )AtCmd, "AT+CIPSEND=%lu\r\n", Length );
-//
-//    /* The CIPSEND command doesn't have a return command
-//       until the data is actually sent. Thus we check here whether
-//       we got the '>' prompt or not. */
-//    Ret = runAtCmd( AtCmd, strlen( ( char * )AtCmd ), ( uint8_t* )AT_SEND_PROMPT_STRING );
-//
-//    /* Return Error */
-//    if ( Ret != ESP8266_OK ) {
-//      return ESP8266_ERROR;
-//    }
-//
-//    /* Wait before sending data. */
-//    tickStart = HAL_GetTick();
-//    while ( HAL_GetTick() - tickStart < 500 ) {
-//    }
-//
-//    /* Send the data */
-//    Ret = runAtCmd( Buffer, Length, ( uint8_t* )AT_SEND_OK_STRING );
-//  }  
-  
-//  memset( AtCmd, '\0', MAX_AT_CMD_SIZE );
-//  sprintf( ( char * )AtCmd, "AT+CIPSTART=\"TCP\",\"%s\",%lu\r\n", ( char * )connection_info->ipAddress, connection_info->port );
-//
-//  /* Send the CIPSTART command */
-//  Ret = runAtCmd( AtCmd, strlen( ( char * )AtCmd ), ( uint8_t* )AT_OK_STRING );  
-  
-//  Trial = 0;
-//  memset( &ConnectionInfo, '\0', sizeof ( ESP8266_ConnectionInfoTypeDef ) );
-//
-//  ConnectionInfo.connectionType = ESP8266_TCP_CONNECTION;
-//  ConnectionInfo.ipAddress = ( uint8_t * )HOST_ADDRESS;
-//  ConnectionInfo.isServer = ESP8266_FALSE;
-//  ConnectionInfo.port = HOST_PORT;
-//
-//  /* Wait for communication establishment */
-//  while ( ESP8266_EstablishConnection( &ConnectionInfo ) != ESP8266_OK ) {
-//
-//    if ( Trial == MAX_NUM_TRIAL ) {
-//      break;
-//    }
-//  }
-//  
-//  sprintf( mess, "Hello XEON2678\r\n" );
-//  Result = ESP8266_SendData(( uint8_t* )mess, strlen(( char * )mess ) );
-//
-//  /* In case of error, quit the Access point */
-//  if ( Result != ESP8266_OK ) {
-//    /* Deinitialize the WiFi module */
-//    ESP8266_DeInit();
-//    /* Call the error Handler */
-////    ErrorHandler();
-//  }
-// 
-////  char* mess = "I am work\r\n";
-//  sprintf( mess, "I am work\r\n" );
-//  Result = ESP8266_SendData(( uint8_t* )mess, strlen(( char * )mess ) );
-//
-//  /* In case of error, quit the Access point */
-//  if ( Result != ESP8266_OK ) {
-//    /* Deinitialize the WiFi module */
-//    ESP8266_DeInit();
-//    /* Call the error Handler */
-////    ErrorHandler();
-//  }  
+
+  repeat_counter = 3;
+  while( repeat_counter-- ) {
+    PT_WAIT_THREAD( &pt_wifi, at_send_command( &pt_at, "AT+CIPSERVER=1\r\n", "OK", 1000, &at_status ));
+    if( at_status == AT_OK ) break;
+    if( repeat_counter == 0 ) PT_RESTART( &pt_wifi );
+  }   
+
+  repeat_counter = 3;
+  while( repeat_counter-- ) {
+    PT_WAIT_THREAD( &pt_wifi, at_send_command( &pt_at, "AT+CIPAP=?\r\n", "OK", 10000, &at_status ));
+    if( at_status == AT_OK ) break;
+    if( repeat_counter == 0 ) PT_RESTART( &pt_wifi );
+  }
   
   while( 1 ) {
     PT_YIELD( &pt_wifi );

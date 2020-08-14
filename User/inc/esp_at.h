@@ -14,6 +14,7 @@
 #define AT_OK                 0
 #define AT_TIMEOUT_TX         1
 #define AT_TIMEOUT_RX         2
+#define AT_ERROR_ANSWER       3
 
 int at_send_command( struct pt* pt, char* at_command, char* answer, uint32_t timeout, int16_t* result );
 

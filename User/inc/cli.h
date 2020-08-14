@@ -19,18 +19,7 @@ void init_cli_task( void );
 */
 int cli_task( void );
 
-/** Регистрация обработчика ответа
-* \param  answer    - ожидаемый ответ
-* \param  callback  - функция вызываемая при событии
-*/
-void cli_register_answer( char* answer, void ( *callback )( void* str, uint32_t len ));
-
-/** Обработчик команд не попавших в сито
-* \param  data      - строка команды
-*/
-void cli_ev_default_handler( void* str, uint32_t len );
-
-void cli_ev_input_data_handler( void* str, uint32_t len );
+void token_handler( void* str, uint32_t len );
 
 /** Запуск задачи обработки сообщений
 * \param  count   - количество символов в буффере

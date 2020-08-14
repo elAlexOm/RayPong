@@ -1152,12 +1152,21 @@
                     <file>
                         <name>$PROJ_DIR$\..\User\src\esp8266_io.c</name>
                     </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\User\src\esp8266_task.c</name>
+                    </file>
                 </group>
                 <file>
                     <name>$PROJ_DIR$\..\User\src\bsp.c</name>
                 </file>
                 <file>
+                    <name>$PROJ_DIR$\..\User\src\cli.c</name>
+                </file>
+                <file>
                     <name>$PROJ_DIR$\..\User\src\control_task.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\User\src\esp_at.c</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\User\src\wifi_task.c</name>

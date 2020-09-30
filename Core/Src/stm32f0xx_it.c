@@ -31,8 +31,6 @@
 #include "control_task.h"
 #include "esp8266_io.h"
 
-#include "esp8266_task.h"
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -232,8 +230,7 @@ void USART3_8_IRQHandler(void)
 {
   /* USER CODE BEGIN USART3_8_IRQn 0 */
   if( USART6->ISR != 0 ) {
-    ESP_UART_irq();
-    //USART6_IRQ_Handler();
+    USART6_IRQ_Handler();
     return;
   }
   /* USER CODE END USART3_8_IRQn 0 */
